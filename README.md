@@ -8,7 +8,7 @@
 ## 🚀 一键安装
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/sakuyawzbb099/vpngate6/main/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate6---/main/install.sh)
 ```
 
 安装后访问 `http://<VPS_IP>:8787/` 进入管理面板。  
@@ -17,7 +17,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/sakuyawzbb099/vpngate6/main/in
 ## 🗑️ 一键卸载
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/sakuyawzbb099/vpngate6/main/install.sh) uninstall
+bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate6---/main/install.sh) uninstall
 ```
 
 卸载所有文件和服务。

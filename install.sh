@@ -7,8 +7,8 @@ if [ "$(id -u)" != "0" ]; then echo -e "${RED}必须以 root 权限运行${NC}";
 
 INSTALL_DIR="/opt/aimilivpn"
 SERVICE_NAME="aimilivpn"
-REPO_OWNER="${1:-sakuyawzbb099}"
-REPO_NAME="${2:-vpngate6}"
+REPO_OWNER="${1:-Michaelwuzb}"
+REPO_NAME="${2:-vpngate6---}"
 BRANCH="main"
 
 # === 卸载功能 ===
