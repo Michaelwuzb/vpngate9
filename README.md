@@ -45,17 +45,17 @@ bash <(curl -Ls https://raw.githubusercontent.com/sakuyawzbb099/vpngate6/main/in
 
 | 通道 | tun | 代理端口 | SOCKS5 |
 |------|-----|---------|--------|
-| CH0 | tun0 | 7928 | socks5://127.0.0.1:7928 |
-| CH1 | tun1 | 7929 | socks5://127.0.0.1:7929 |
-| CH2 | tun2 | 7930 | socks5://127.0.0.1:7930 |
-| CH3 | tun3 | 7931 | socks5://127.0.0.1:7931 |
-| CH4 | tun4 | 7932 | socks5://127.0.0.1:7932 |
-| CH5 | tun5 | 7933 | socks5://127.0.0.1:7933 |
+| CH0 | tun0 | 47928 | socks5://127.0.0.1:47928 |
+| CH1 | tun1 | 47929 | socks5://127.0.0.1:47929 |
+| CH2 | tun2 | 47930 | socks5://127.0.0.1:47930 |
+| CH3 | tun3 | 47931 | socks5://127.0.0.1:47931 |
+| CH4 | tun4 | 47932 | socks5://127.0.0.1:47932 |
+| CH5 | tun5 | 47933 | socks5://127.0.0.1:47933 |
 
 ```bash
 # 示例：通过 CH0 (日本) 访问
-export http_proxy=http://127.0.0.1:7928
-export https_proxy=http://127.0.0.1:7928
+export http_proxy=http://127.0.0.1:47928
+export https_proxy=http://127.0.0.1:47928
 curl ifconfig.me  # 显示日本 IP
 ```
 
@@ -78,7 +78,7 @@ ml start    # 启动服务
 ### 6通道独立管理
 - 每个通道独立 OpenVPN 连接
 - 独立虚拟网卡 (tun0~tun5)
-- 独立 HTTP/SOCKS5 代理端口 (7928~7933)
+- 独立 HTTP/SOCKS5 代理端口 (47928~47933)
 - 独立策略路由表，互不冲突
 
 ### 节点管理与筛选
@@ -102,8 +102,8 @@ ml start    # 启动服务
 ## ⚠️ 常见问题
 
 ### Web UI 无法访问
-- 检查防火墙：`ufw allow 8787/tcp && ufw allow 7928/tcp`
-- 云服务商安全组放行 8787、7928~7933 端口
+- 检查防火墙：`ufw allow 8787/tcp && ufw allow 47928/tcp`
+- 云服务商安全组放行 8787、47928~47933 端口
 
 ### 节点列表为空
 - 检查 DNS：`echo "nameserver 8.8.8.8" > /etc/resolv.conf`
