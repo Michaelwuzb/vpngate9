@@ -141,4 +141,49 @@ ml start    # 启动服务
 
 ---
 
+## 🛡️ 通道守护脚本 (vpngate9_guard.py)
+
+自动保活 9 通道：定时检查，发现 `error` / 假连接（connected 但 socks5 实测无流量）自动换节点重连。
+
+### 安装
+
+```bash
+cp vpngate9_guard.py /opt/michaelvpn/vpngate9_guard.py
+cat > /etc/systemd/system/vpngate9-guard.service << 'EOF'
+[Unit]
+Description=vpngate9 channel guard (auto-reconnect / rotate)
+After=network.target michaelvpn.service
+Requires=michaelvpn.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/michaelvpn/vpngate9_guard.py
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable --now vpngate9-guard
+```
+
+### 行为说明
+
+- 每 60 秒检查一轮 9 通道
+- 发现 `error` 或假连接 → 自动换节点重连
+- **手动关闭的通道（面板关掉开关 enabled=False）不会被动重连** —— 想手动断某个通道，用面板"开关"关掉，别用"断开"按钮
+- 日志：`journalctl -u vpngate9-guard -f`
+
+### 可调参数（脚本顶部）
+
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `CHECK_EVERY` | 60 | 检查间隔（秒） |
+| `ROTATE_EVERY` | 30 | 每 N 轮主动换节点切 IP（0=不主动切） |
+| `USER` / `PASS` | admin/admin | 面板登录凭据 |
+
+---
+
 *基于 baoweise-bot/aimili-vpngate 改造，增加9通道多路出站支持*
