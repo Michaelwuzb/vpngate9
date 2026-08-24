@@ -5,15 +5,15 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC
 
 if [ "$(id -u)" != "0" ]; then echo -e "${RED}必须以 root 权限运行${NC}"; exit 1; fi
 
-INSTALL_DIR="/opt/aimilivpn"
-SERVICE_NAME="aimilivpn"
+INSTALL_DIR="/opt/michaelvpn"
+SERVICE_NAME="michaelvpn"
 REPO_OWNER="${1:-Michaelwuzb}"
-REPO_NAME="${2:-vpngate6---}"
+REPO_NAME="${2:-vpngate9}"
 BRANCH="main"
 
 # === 卸载功能 ===
 if [ "${1:-}" = "uninstall" ] || [ "${1:-}" = "卸载" ]; then
-    echo -e "${YELLOW}正在卸载 AimiliVPN...${NC}"
+    echo -e "${YELLOW}正在卸载 MichaelVPN...${NC}"
     systemctl stop ${SERVICE_NAME} 2>/dev/null || true
     systemctl disable ${SERVICE_NAME} 2>/dev/null || true
     rm -f /lib/systemd/system/${SERVICE_NAME}.service
@@ -21,7 +21,7 @@ if [ "${1:-}" = "uninstall" ] || [ "${1:-}" = "卸载" ]; then
     rm -rf "$INSTALL_DIR"
     rm -f /usr/bin/ml
     rm -f /etc/sysctl.d/99-${SERVICE_NAME}.conf
-    pkill -f "vpngate6_multi\|proxy_server_multi" 2>/dev/null || true
+    pkill -f "vpngate9_multi\|proxy_server_multi" 2>/dev/null || true
     echo -e "${GREEN}卸载完成！${NC}"
     exit 0
 fi
@@ -69,7 +69,7 @@ deploy_code() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AimiliVPN 登录</title>
+<title>MichaelVPN 登录</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f0f13;color:#e0e0e0;display:flex;align-items:center;justify-content:center;min-height:100vh}
@@ -87,8 +87,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 </head>
 <body>
 <div class="card">
-<div class="logo">AimiliVPN</div>
-<div class="sub">6通道 VPN 管理面板</div>
+<div class="logo">MichaelVPN</div>
+<div class="sub">9通道 VPN 管理面板</div>
 <form method="post" action="/api/login">
 <div class="fg"><label>管理账号</label><input type="text" name="username" required></div>
 <div class="fg"><label>安全密码</label><input type="password" name="password" required></div>
@@ -114,13 +114,13 @@ install_service() {
     echo -e "${CYAN}[3/4] 配置服务...${NC}"
     cat > /lib/systemd/system/${SERVICE_NAME}.service << 'SERVICEEOF'
 [Unit]
-Description=AimiliVPN 6-Channel VPN Gateway
+Description=MichaelVPN 9-Channel VPN Gateway
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/aimilivpn
-ExecStart=/usr/bin/python3 /opt/aimilivpn/vpngate6_multi.py
+WorkingDirectory=/opt/michaelvpn
+ExecStart=/usr/bin/python3 /opt/michaelvpn/vpngate9_multi.py
 Restart=always
 RestartSec=5
 
@@ -137,30 +137,30 @@ install_ml() {
     cat > /usr/bin/ml << 'MLEOF'
 #!/bin/bash
 case "${1:-status}" in
-    start)   systemctl start aimilivpn 2>/dev/null ;;
-    stop)    systemctl stop aimilivpn 2>/dev/null ;;
-    restart) systemctl restart aimilivpn 2>/dev/null ;;
+    start)   systemctl start michaelvpn 2>/dev/null ;;
+    stop)    systemctl stop michaelvpn 2>/dev/null ;;
+    restart) systemctl restart michaelvpn 2>/dev/null ;;
     uninstall|卸载)
-        echo -e "\033[0;33m正在卸载 AimiliVPN...\033[0m"
-        systemctl stop aimilivpn 2>/dev/null || true
-        systemctl disable aimilivpn 2>/dev/null || true
-        rm -f /lib/systemd/system/aimilivpn.service
+        echo -e "\033[0;33m正在卸载 MichaelVPN...\033[0m"
+        systemctl stop michaelvpn 2>/dev/null || true
+        systemctl disable michaelvpn 2>/dev/null || true
+        rm -f /lib/systemd/system/michaelvpn.service
         systemctl daemon-reload
-        rm -rf /opt/aimilivpn
+        rm -rf /opt/michaelvpn
         rm -f /usr/bin/ml
-        rm -f /etc/sysctl.d/99-aimilivpn.conf
-        pkill -f "vpngate6_multi\|proxy_server_multi" 2>/dev/null || true
+        rm -f /etc/sysctl.d/99-michaelvpn.conf
+        pkill -f "vpngate9_multi\|proxy_server_multi" 2>/dev/null || true
         echo -e "\033[0;32m卸载完成！\033[0m" ;;
     status)
-        echo "=== AimiliVPN 6-Channel ==="
+        echo "=== MichaelVPN 9-Channel ==="
         curl -s http://localhost:8787/api/status | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
 for c in d['channels']:
     s=c['state']; co=c.get('node_country') or '-'; ip=c.get('node_ip') or '-'
     print(f'CH{c[\"index\"]}: {s:15s} {co:20s} IP={ip:16s} :{c[\"proxy_port\"]}')
-print(f'--- {d[\"node_count\"]} nodes ---')" 2>/dev/null || systemctl status aimilivpn --no-pager ;;
-    logs)    journalctl -u aimilivpn --no-pager -n 50 -f ;;
+print(f'--- {d[\"node_count\"]} nodes ---')" 2>/dev/null || systemctl status michaelvpn --no-pager ;;
+    logs)    journalctl -u michaelvpn --no-pager -n 50 -f ;;
     *)       echo "用法: ml {start|stop|restart|status|logs|uninstall}" ;;
 esac
 MLEOF
@@ -179,7 +179,7 @@ SYSCTLEOF
 }
 
 echo -e "${CYAN}============================"
-echo "  AimiliVPN 6-Channel 部署"
+echo "  MichaelVPN 9-Channel 部署"
 echo "============================${NC}"
 detect_distro
 install_deps
@@ -192,13 +192,13 @@ echo ""
 echo -e "${GREEN}部署完成！启动服务...${NC}"
 systemctl start ${SERVICE_NAME} 2>/dev/null || true
 sleep 3
-systemctl is-active ${SERVICE_NAME} &>/dev/null && echo -e "${GREEN}服务运行中${NC}" || echo -e "${YELLOW}检查: systemctl status aimilivpn${NC}"
+systemctl is-active ${SERVICE_NAME} &>/dev/null && echo -e "${GREEN}服务运行中${NC}" || echo -e "${YELLOW}检查: systemctl status michaelvpn${NC}"
 PUBLIC_IP=$(curl -s --connect-timeout 5 api64.ipify.org 2>/dev/null || curl -s --connect-timeout 5 api.ipify.org 2>/dev/null || echo "<VPS_IP>")
 echo ""
 echo -e "  Web UI:    ${CYAN}http://${PUBLIC_IP}:8787/${NC}"
 echo -e "  默认账号:  ${CYAN}admin${NC}"
 echo -e "  默认密码:  ${CYAN}admin${NC}"
-echo -e "  代理端口:  ${CYAN}47928~47933${NC} (tun0~tun5)"
+echo -e "  代理端口:  ${CYAN}47928~47936${NC} (tun0~tun8)"
 echo -e "  状态:      ${CYAN}ml status${NC}"
 echo -e "  日志:      ${CYAN}ml logs${NC}"
 echo -e "  卸载:      ${CYAN}ml uninstall${NC}"

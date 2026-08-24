@@ -1,6 +1,6 @@
-# AimiliVPN 6-Channel
+# MichaelVPN 9-Channel
 
-> 基于 VPNGate 的 6 通道独立出口 VPN 网关  
+> 基于 VPNGate 的 9 通道独立出口 VPN 网关
 > 每个通道拥有独立的 OpenVPN 隧道、虚拟网卡(tun)、代理端口和出站 IP
 
 ---
@@ -8,35 +8,36 @@
 ## 🚀 一键安装
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate6---/main/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate9/main/install.sh)
 ```
 
-安装后访问 `http://<VPS_IP>:8787/` 进入管理面板。  
-默认账号密码从旧的 `ui_auth.json` 读取，可在 `/opt/aimilivpn/vpngate_data/ui_auth.json` 中修改。
+安装后访问 `http://<VPS_IP>:8787/` 进入管理面板。
+默认账号密码从 `ui_auth.json` 读取，可在 `/opt/michaelvpn/vpngate_data/ui_auth.json` 中修改。
 
 ## 🗑️ 一键卸载
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate6---/main/install.sh) uninstall
+bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate9/main/install.sh) uninstall
 ```
 
 卸载所有文件和服务。
-
-安装后访问 `http://<VPS_IP>:8787/` 进入管理面板。  
-默认账号密码从旧的 `ui_auth.json` 读取，可在 `/opt/aimilivpn/vpngate_data/ui_auth.json` 中修改。
 
 ---
 
 ## 💡 快速使用
 
 ### 1. 登录管理面板
+
 浏览器打开 `http://<VPS_IP>:8787/`，输入账号密码登录。
 
 ### 2. 获取节点
+
 点击 **获取节点** 按钮拉取 VPNGate 可用节点。
 
 ### 3. 连接通道
-每个通道(CH0~CH5)可独立选择国家 + IP类型(住宅/机房/移动)：
+
+每个通道(CH0~CH8)可独立选择国家 + IP类型(住宅/机房/移动)：
+
 - 选好国家 + IP类型 → 点击 **连接**
 - 或从下方节点表直接点 **切换** → 选目标通道
 - 每个通道有独立出口 IP
@@ -51,6 +52,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/Michaelwuzb/vpngate6---/main/i
 | CH3 | tun3 | 47931 | socks5://127.0.0.1:47931 |
 | CH4 | tun4 | 47932 | socks5://127.0.0.1:47932 |
 | CH5 | tun5 | 47933 | socks5://127.0.0.1:47933 |
+| CH6 | tun6 | 47934 | socks5://127.0.0.1:47934 |
+| CH7 | tun7 | 47935 | socks5://127.0.0.1:47935 |
+| CH8 | tun8 | 47936 | socks5://127.0.0.1:47936 |
 
 ```bash
 # 示例：通过 CH0 (日本) 访问
@@ -64,7 +68,7 @@ curl ifconfig.me  # 显示日本 IP
 ## 🎛️ 管理命令
 
 ```bash
-ml status   # 查看6通道状态
+ml status   # 查看9通道状态
 ml restart  # 重启服务
 ml logs     # 查看实时日志
 ml stop     # 停止服务
@@ -75,10 +79,10 @@ ml start    # 启动服务
 
 ## ⚙️ 核心功能
 
-### 6通道独立管理
+### 9通道独立管理
 - 每个通道独立 OpenVPN 连接
-- 独立虚拟网卡 (tun0~tun5)
-- 独立 HTTP/SOCKS5 代理端口 (47928~47933)
+- 独立虚拟网卡 (tun0~tun8)
+- 独立 HTTP/SOCKS5 代理端口 (47928~47936)
 - 独立策略路由表，互不冲突
 
 ### 节点管理与筛选
@@ -103,7 +107,7 @@ ml start    # 启动服务
 
 ### Web UI 无法访问
 - 检查防火墙：`ufw allow 8787/tcp && ufw allow 47928/tcp`
-- 云服务商安全组放行 8787、47928~47933 端口
+- 云服务商安全组放行 8787、47928~47936 端口
 
 ### 节点列表为空
 - 检查 DNS：`echo "nameserver 8.8.8.8" > /etc/resolv.conf`
@@ -117,8 +121,8 @@ ml start    # 启动服务
 ## 📦 文件结构
 
 ```
-/opt/aimilivpn/
-├── vpngate6_multi.py      # 6通道管理器
+/opt/michaelvpn/
+├── vpngate9_multi.py      # 9通道管理器
 ├── proxy_server_multi.py  # 多通道代理
 ├── vpn_utils.py           # IP信息富集
 ├── install.sh             # 部署脚本
@@ -137,4 +141,4 @@ ml start    # 启动服务
 
 ---
 
-*基于 baoweise-bot/aimili-vpngate 改造，增加6通道多路出站支持*
+*基于 baoweise-bot/aimili-vpngate 改造，增加9通道多路出站支持*

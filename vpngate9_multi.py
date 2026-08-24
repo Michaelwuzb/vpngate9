@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-vpngate6_multi.py - 6-Channel VPN Gateway + Node Management UI
+vpngate9_multi.py - 9-Channel VPN Gateway + Node Management UI
 Combines: multi-tunnel + full node table (IP info, filters, assign to channels)
 """
 from __future__ import annotations
@@ -39,7 +39,7 @@ def generate_token() -> str:
 import hashlib, secrets
 LOGIN_HTML_CACHE = ""
 
-NUM_CHANNELS = 6
+NUM_CHANNELS = 9
 PROXY_BASE_PORT = 47928
 UI_PORT = 8787
 UI_HOST = "::"
@@ -47,7 +47,7 @@ LOCAL_PROXY_HOST = "127.0.0.1"
 API_URL = "https://www.vpngate.net/api/iphone/"
 FETCH_INTERVAL = int(os.environ.get("FETCH_INTERVAL", "600"))
 
-ROOT_DIR = Path("/opt/aimilivpn")
+ROOT_DIR = Path("/opt/michaelvpn")
 DATA_DIR = ROOT_DIR / "vpngate_data"
 CONFIG_DIR = DATA_DIR / "configs"
 NODES_FILE = DATA_DIR / "nodes.json"
@@ -358,7 +358,7 @@ PAGE_HTML = r"""<!doctype html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AimiliVPN 6通道</title>
+<title>MichaelVPN 9通道</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f0f13;color:#e0e0e0;font-size:14px}
@@ -422,8 +422,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </head>
 <body>
 <div class="hd">
-  <h1>AimiliVPN</h1>
-  <span class="bdg">6通道</span>
+  <h1>MichaelVPN</h1>
+  <span class="bdg">9通道</span>
   <span class="nc" id="nc">节点: 加载中...</span>
   <button class="btn" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:#e0e0e0" onclick="showAdmin()">管理员</button>
 </div>
@@ -859,7 +859,7 @@ def channel_watchdog():
                 log(f"[WD CH{ch.index}] Error: {e}")
 
 def main():
-    log("=== AimiliVPN 6-Channel Manager + Node UI ===")
+    log("=== MichaelVPN 9-Channel Manager + Node UI ===")
     try: subprocess.run(["pkill","-f","openvpn"], timeout=5, capture_output=True)
     except: pass
     ch_cfg = read_json(CHANNELS_FILE)
